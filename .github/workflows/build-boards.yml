@@ -79,12 +79,18 @@ jobs:
       run: echo "::add-matcher::$GITHUB_WORKSPACE/.github/workflows/match-build-fail.json"
 
     - name: Build board
-      run: python3 -u build_release_files.py
-      working-directory: tools
       env:
-        BOARDS: ${{ matrix.board }}
-        PULL: ${{ github.event.number }}
-        HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        TRANSLATION: "en_US"
+        BOARD: "waveshare_esp32_s3_zero"
+        FLAGS: "CIRCUITPY_BLEIO=1 FLASH_SIZE_SDKCONFIG=esp-idf-config/sdkconfig-flash-4MB-no-ota-no-uf2.defaults"
+        DEBUG: ${{ inputs.debug && '1' || '0' }}
+      run: make -j4 $FLAGS BOARD="$BOARD" DEBUG=$DEBUG TRANSLATION="$TRANSLATION"
+      working-directory: ports/${{ steps.board-to-port.outputs.port }}
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: "board"
+        path: ports/${{ steps.board-to-port.outputs.port }}/build-${{ inputs.board }}/firmware.*
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
