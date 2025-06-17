@@ -84,13 +84,13 @@ jobs:
         BOARD: "waveshare_esp32_s3_zero"
         FLAGS: "CIRCUITPY_BLEIO=1 FLASH_SIZE_SDKCONFIG=esp-idf-config/sdkconfig-flash-4MB-no-ota-no-uf2.defaults"
         DEBUG: ${{ inputs.debug && '1' || '0' }}
-      run: make -j4 $FLAGS BOARD="$BOARD" DEBUG=$DEBUG TRANSLATION="$TRANSLATION"
+      run: make -j4 CIRCUITPY_BLEIO=1 FLASH_SIZE_SDKCONFIG=esp-idf-config/sdkconfig-flash-4MB-no-ota-no-uf2.defaults BOARD=waveshare_esp32_s3_zero TRANSLATION=en_US
       working-directory: ports/${{ steps.board-to-port.outputs.port }}
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: "board"
-        path: ports/${{ steps.board-to-port.outputs.port }}/build-${{ inputs.board }}/firmware.*
+        path: ports/${{ steps.board-to-port.outputs.port }}/build-board/firmware.*
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
