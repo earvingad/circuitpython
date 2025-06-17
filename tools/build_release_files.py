@@ -83,7 +83,7 @@ for board in build_boards:
             # But sometimes a particular language needs to be built from scratch, if, for instance,
             # CFLAGS_INLINE_LIMIT is set for a particular language to make it fit.
             clean_build_check_result = subprocess.run(
-                "make -C ../ports/{port} TRANSLATION={language} BOARD={board} check-release-needs-clean-build -j {cores} | fgrep 'RELEASE_NEEDS_CLEAN_BUILD = 1'".format(
+                "make -C ../ports/{port} TRANSLATION={language} BOARD={board} CIRCUITPY_BLEIO=1 FLASH_SIZE_SDKCONFIG=esp-idf-config/sdkconfig-flash-4MB-no-ota-no-uf2.defaults check-release-needs-clean-build -j {cores} | fgrep 'RELEASE_NEEDS_CLEAN_BUILD = 1'".format(
                     port=board_info["port"], language=language, board=board, cores=cores
                 ),
                 shell=True,
